@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block body%}
+  <h1>Current Quests:</h1>
+  <ul>
+    {% for q in questlist %}
+    <li>{{ q.title }}
+    {% endfor %}
+  </ul>
+{%endblock%}

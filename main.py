@@ -17,15 +17,48 @@
 import jinja2
 import os
 import webapp2
+import datetime
+
+
+from google.appengine.ext import db
+from google.appengine.api import users
+
+import model
 
 jinja_env = jinja2.Environment(autoescape=True,
     loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), 'templates')))
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
+        if self.request.path == '/list':
+            self.qlist()
+            return
         template = jinja_env.get_template('index.html')
         self.response.write(template.render())
 
+    def qlist(self):
+      """List some quests."""
+      qlist = db.GqlQuery("SELECT * FROM Quest")
+      template = jinja_env.get_template("list.html")
+      self.response.out.write(template.render(questlist=qlist))
+
+    def add(self):
+      """Add a new Quest."""
+      nq = model.Quest()
+      nq.title = self.request.get("title")
+      nq.description = self.request.get("description")
+      #defaults
+      nq.owner = users.get_current_user()
+      nq.created = datetime.now()
+
+class AddQuestHandler(webapp2.RequestHandler):
+    """Display form, or receive POST of quest data."""
+    def get(self):
+      template = jinja_env.get_template('addquest.html')
+      self.response.write(template.render())
+
 app = webapp2.WSGIApplication([
-    ('/', MainHandler)
+    ('/', MainHandler),
+    ('/list', MainHandler),
+    ('/add', AddQuestHandler)
 ], debug=True)

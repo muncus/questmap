@@ -1,7 +1,7 @@
-Appengine Template
+QuestMap, v2.0
 ==================
 
-Base template for appengine apps, including Bootstrap.
+QuestMap is an experiment in visualizing one's todo list.
+It aims to emulate the "Quest Map" common to many quest-based video games.
 
-I've re-created this same setup several times, and thought it would be useful
-to have the whole thing in a git repo, for easy cloning.
+Users can create their own quests, give them locations, and see which quests are nearby.
