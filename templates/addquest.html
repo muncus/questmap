@@ -29,6 +29,7 @@
         var input = document.getElementById('locationSearchBox');
         var autocomplete = new google.maps.places.Autocomplete(input);
 
+
         autocomplete.bindTo('bounds', map);
 
         var infowindow = new google.maps.InfoWindow();
@@ -46,6 +47,12 @@
             input.className = 'notfound';
             return;
           }
+
+          // Set the form inputs based on location.
+          var lat = document.getElementById('lat_input');
+          var lon = document.getElementById('lon_input');
+          lat.value = place.geometry.location.lat();
+          lon.value = place.geometry.location.lng();
 
           // If the place has a geometry, then present it on a map.
           if (place.geometry.viewport) {
@@ -89,7 +96,10 @@
     <input type="text" name="desc">
     <label> Location </label>
     <input type="text" name="locationSearchBox" id="locationSearchBox">
-    <button class="btn btn-danger" type="submit">Go!</button>
+    <input type="hidden" id="lat_input" name="lat">
+    <input type="hidden" id="lon_input" name="lon">
+    <br/>
+    <button class="btn btn-warning" type="submit">Accept Quest!</button>
   </form>
   <div id="map_canvas">
   </div>

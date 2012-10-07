@@ -8,7 +8,7 @@ class Quest(db.Model):
   title = db.StringProperty(required=True)
   description = db.TextProperty()
   is_done = db.BooleanProperty(default=False)
-  created = db.DateProperty()
+  created = db.DateTimeProperty()
   location = db.GeoPtProperty(required=False)
   loc_name = db.StringProperty(required=False)
   owner = db.UserProperty()

@@ -17,8 +17,8 @@
 import jinja2
 import os
 import webapp2
-import datetime
 
+from datetime import datetime
 
 from google.appengine.ext import db
 from google.appengine.api import users
@@ -42,20 +42,27 @@ class MainHandler(webapp2.RequestHandler):
       template = jinja_env.get_template("list.html")
       self.response.out.write(template.render(questlist=qlist))
 
-    def add(self):
-      """Add a new Quest."""
-      nq = model.Quest()
-      nq.title = self.request.get("title")
-      nq.description = self.request.get("description")
-      #defaults
-      nq.owner = users.get_current_user()
-      nq.created = datetime.now()
-
 class AddQuestHandler(webapp2.RequestHandler):
     """Display form, or receive POST of quest data."""
     def get(self):
       template = jinja_env.get_template('addquest.html')
       self.response.write(template.render())
+
+    def post(self):
+      desc = self.request.get('desc', None)
+      lat = self.request.get('lat', None)
+      lon = self.request.get('lon', None)
+      if not lat or not lon:
+        self.redirect('/add')
+      else:
+        nq = model.Quest(
+          title=desc,
+          description=desc,
+          owner=users.get_current_user(),
+          created = datetime.now(),
+        )
+        nq.put()
+        self.redirect('/list')
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
