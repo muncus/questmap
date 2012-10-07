@@ -60,6 +60,8 @@ class AddQuestHandler(webapp2.RequestHandler):
           description=desc,
           owner=users.get_current_user(),
           created = datetime.now(),
+          location = db.GeoPt(lat, lon),
+          loc_name = self.request.get('location', ''),
         )
         nq.put()
         self.redirect('/list')

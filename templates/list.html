@@ -3,7 +3,7 @@
   <h1>Current Quests:</h1>
   <ul>
     {% for q in questlist %}
-    <li>{{ q.title }}
+    <li>{{ q.title }} <span class="muted">({{q.loc_name}})</span> </li>
     {% endfor %}
   </ul>
 {%endblock%}
