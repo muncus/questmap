@@ -12,6 +12,8 @@
 <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
 <script src="/json"></script>
 <script>
+var infowindow = null;
+
 function initialize() {
   var mapOptions = {
     zoom: 10,
@@ -26,6 +28,9 @@ function initialize() {
 
 // Cribbed from google samples.
 function setMarkers(map, locations) {
+  infowindow = new google.maps.InfoWindow({
+    content: "loading.."
+  });
   // Add markers to the map
 
   // Marker sizes are expressed as a Size of X,Y
@@ -40,6 +45,11 @@ function setMarkers(map, locations) {
         map: map,
         title: beach[0],
         zIndex: beach[3]
+    });
+    marker.html = beach[0];
+    google.maps.event.addListener(marker, 'click', function () {
+      infowindow.setContent(this.html);
+      infowindow.open(map, this);
     });
   }
 }
