@@ -46,7 +46,7 @@ function setMarkers(map, locations) {
         title: beach[0],
         zIndex: beach[3]
     });
-    marker.html = beach[0];
+    marker.html = beach[4];
     google.maps.event.addListener(marker, 'click', function () {
       infowindow.setContent(this.html);
       infowindow.open(map, this);

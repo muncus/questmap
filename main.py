@@ -85,8 +85,14 @@ class MapHandler(webapp2.RequestHandler):
       for q in quests:
         if not q.location:
           continue
-        qlist.append([q.title, q.location.lat, q.location.lon, ZVAL])
+        qlist.append([q.title, q.location.lat, q.location.lon, ZVAL, self.getInfoWindowHtml(q)])
       self.response.write("var locations = " + json.dumps(qlist))
+
+    def getInfoWindowHtml(self, quest):
+      """get html to display in the InfoWindow."""
+      return "<b>%(title)s</b><br/><span class='muted'>%(loc)s</span>" % {
+          'title': quest.title,
+          'loc': quest.loc_name, }
 
 
 app = webapp2.WSGIApplication([
