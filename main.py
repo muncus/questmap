@@ -17,6 +17,7 @@
 import jinja2
 import os
 import webapp2
+import simplejson as json
 
 from datetime import datetime
 
@@ -66,8 +67,32 @@ class AddQuestHandler(webapp2.RequestHandler):
         nq.put()
         self.redirect('/list')
 
+class MapHandler(webapp2.RequestHandler):
+    """Handle the showing of the map, and feed of locations."""
+    def get(self):
+      if self.request.path == "/json":
+        return self.getJson()
+      else:
+        template = jinja_env.get_template('map.html')
+        self.response.write(template.render())
+
+    def getJson(self):
+      """Generate a json feed, for loading from the map."""
+      ZVAL = 1 # static z value for stacking.
+      quests = db.GqlQuery(
+          "SELECT * FROM Quest WHERE owner = :1", users.get_current_user())
+      qlist = []
+      for q in quests:
+        if not q.location:
+          continue
+        qlist.append([q.title, q.location.lat, q.location.lon, ZVAL])
+      self.response.write("var locations = " + json.dumps(qlist))
+
+
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/list', MainHandler),
-    ('/add', AddQuestHandler)
+    ('/add', AddQuestHandler),
+    ('/json', MapHandler),
+    ('/map', MapHandler),
 ], debug=True)

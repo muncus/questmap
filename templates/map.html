@@ -1,0 +1,56 @@
+
+{% extends "base.html" %}
+{% block extra_head %}
+<style>
+  #map_canvas {
+    height: 400px;
+    width: 600px;
+    margin-top: 0.6em;
+  }
+</style>
+
+<script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script src="/json"></script>
+<script>
+function initialize() {
+  var mapOptions = {
+    zoom: 10,
+    center: new google.maps.LatLng(-33.9, 151.2),
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  }
+  var map = new google.maps.Map(document.getElementById("map_canvas"),
+                                mapOptions);
+
+  setMarkers(map, locations);
+}
+
+// Cribbed from google samples.
+function setMarkers(map, locations) {
+  // Add markers to the map
+
+  // Marker sizes are expressed as a Size of X,Y
+  // where the origin of the image (0,0) is located
+  // in the top left of the image.
+
+  for (var i = 0; i < locations.length; i++) {
+    var beach = locations[i];
+    var myLatLng = new google.maps.LatLng(beach[1], beach[2]);
+    var marker = new google.maps.Marker({
+        position: myLatLng,
+        map: map,
+        title: beach[0],
+        zIndex: beach[3]
+    });
+  }
+}
+google.maps.event.addDomListener(window, 'load', initialize);
+window.onload = initialize;
+</script>
+{% endblock %}
+
+{% block body%}
+  <body onload="initialize">
+  <div id="map_canvas">
+  </div>
+  </body>
+{%endblock%}
