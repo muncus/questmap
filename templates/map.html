@@ -9,10 +9,16 @@
   }
 </style>
 
-<script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
 <script src="/json"></script>
 <script>
 var infowindow = null;
+
+function handleNoGeolocation(errorFlag) {
+  // set a reasonable default, like sf.
+  map.setCenter(new google.maps.LatLng(37.775, -122.4183));
+} 
+
 
 function initialize() {
   var mapOptions = {
@@ -23,6 +29,20 @@ function initialize() {
   var map = new google.maps.Map(document.getElementById("map_canvas"),
                                 mapOptions);
 
+  // Try HTML5 geolocation
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = new google.maps.LatLng(position.coords.latitude,
+                                       position.coords.longitude);
+
+      map.setCenter(pos);
+    }, function() {
+      handleNoGeolocation(true);
+    });
+  } else {
+    // Browser doesn't support Geolocation
+    handleNoGeolocation(false);
+  }
   setMarkers(map, locations);
 }
 
@@ -59,8 +79,6 @@ window.onload = initialize;
 {% endblock %}
 
 {% block body%}
-  <body onload="initialize">
-  <div id="map_canvas">
+  <div class="span12" id="map_canvas">
   </div>
-  </body>
 {%endblock%}

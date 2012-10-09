@@ -17,6 +17,11 @@
     </style>
 
     <script>
+      function handleNoGeolocation(errorFlag) {
+        // set a reasonable default, like sf.
+        map.setCenter(new google.maps.LatLng(37.775, -122.4183));
+      } 
+
       function initialize() {
         var mapOptions = {
           center: new google.maps.LatLng(-33.8688, 151.2195),
@@ -36,6 +41,21 @@
         var marker = new google.maps.Marker({
           map: map
         });
+
+        // Try HTML5 geolocation
+        if(navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = new google.maps.LatLng(position.coords.latitude,
+                                             position.coords.longitude);
+
+            map.setCenter(pos);
+          }, function() {
+            handleNoGeolocation(true);
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          handleNoGeolocation(false);
+        }
 
         google.maps.event.addListener(autocomplete, 'place_changed', function() {
           infowindow.close();
