@@ -17,14 +17,15 @@
 import jinja2
 import os
 import webapp2
-import simplejson as json
 
 from datetime import datetime
 
 from google.appengine.ext import db
 from google.appengine.api import users
 
+from anyjson import simplejson
 import model
+import settings
 
 jinja_env = jinja2.Environment(autoescape=True,
     loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), 'templates')))
@@ -47,7 +48,7 @@ class AddQuestHandler(webapp2.RequestHandler):
     """Display form, or receive POST of quest data."""
     def get(self):
       template = jinja_env.get_template('addquest.html')
-      self.response.write(template.render())
+      self.response.write(template.render({'apikey': settings.MAPS_API_KEY}))
 
     def post(self):
       desc = self.request.get('desc', None)
@@ -74,7 +75,7 @@ class MapHandler(webapp2.RequestHandler):
         return self.getJson()
       else:
         template = jinja_env.get_template('map.html')
-        self.response.write(template.render())
+        self.response.write(template.render({'apikey': settings.MAPS_API_KEY}))
 
     def getJson(self):
       """Generate a json feed, for loading from the map."""
@@ -86,7 +87,7 @@ class MapHandler(webapp2.RequestHandler):
         if not q.location:
           continue
         qlist.append([q.title, q.location.lat, q.location.lon, ZVAL, self.getInfoWindowHtml(q)])
-      self.response.write("var locations = " + json.dumps(qlist))
+      self.response.write("var locations = " + simplejson.dumps(qlist))
 
     def getInfoWindowHtml(self, quest):
       """get html to display in the InfoWindow."""

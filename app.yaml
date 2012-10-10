@@ -1,5 +1,5 @@
-application: new-project-template
-version: 1
+application: muncus
+version: 5-questmap
 runtime: python27
 api_version: 1
 threadsafe: yes
