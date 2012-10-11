@@ -2,10 +2,20 @@
 {% extends "base.html" %}
 {% block extra_head %}
 <style>
+  html, body {
+    height: 95%;
+  }
+  .container-fluid {
+    height: 100%;
+  }
+  .navbar {
+    margin-bottom: 0px;
+  }
+
   #map_canvas {
-    height: 400px;
-    width: 600px;
-    margin-top: 0.6em;
+    height: 100%;
+    width: 100%;
+    margin: 0px;
   }
 </style>
 
@@ -79,6 +89,5 @@ window.onload = initialize;
 {% endblock %}
 
 {% block body%}
-  <div class="span12" id="map_canvas">
-  </div>
+  <div  id="map_canvas" ></div>
 {%endblock%}

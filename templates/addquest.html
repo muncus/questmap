@@ -6,7 +6,6 @@
       #map_canvas {
         height: 400px;
         width: 600px;
-        margin-top: 0.6em;
       }
       input {
         border: 1px solid  rgba(0, 0, 0, 0.5);
@@ -110,7 +109,6 @@
 
 {% block body%}
   <h4>Add new Quest</h4>
-  <div class=container>
   <form method="POST">
     <label>Description</label>
     <input type="text" name="desc">
@@ -122,6 +120,5 @@
     <button class="btn btn-warning" type="submit">Accept Quest!</button>
   </form>
   <div id="map_canvas">
-  </div>
   </div>
 {%endblock%}
